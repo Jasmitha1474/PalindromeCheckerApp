@@ -1,46 +1,90 @@
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Scanner;;
 
-//usecase7
+import java.util.Scanner;
+
 public class PalindromeCheckerApp {
+
+    // Node class for Singly Linked List
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
-        // Read input string
         System.out.print("Input: ");
-        String input = sc.nextLine();
+        String input = sc.nextLine().toLowerCase();
 
-        // Convert to lowercase (optional for case-insensitive check)
-        input = input.toLowerCase();
+        // Convert string to linked list
+        Node head = null, tail = null;
 
-        // Create a Deque
-        Deque<Character> deque = new LinkedList<>();
-
-        // Add each character into deque
         for (char c : input.toCharArray()) {
-            deque.addLast(c);   // insert at rear
-        }
-
-        boolean isPalindrome = true;
-
-        // Compare front and rear elements
-        while (deque.size() > 1) {
-
-            char front = deque.removeFirst();  // remove from front
-            char rear  = deque.removeLast();   // remove from rear
-
-            if (front != rear) {
-                isPalindrome = false;
-                break;
+            Node newNode = new Node(c);
+            if (head == null) {
+                head = tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
             }
         }
+
+        boolean isPalindrome = checkPalindrome(head);
 
         System.out.println("Is Palindrome? : " + isPalindrome);
 
         sc.close();
+    }
+
+    // Method to check palindrome using linked list
+    public static boolean checkPalindrome(Node head) {
+
+        if (head == null || head.next == null)
+            return true;
+
+        // Step 1: Find middle using fast & slow pointers
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Step 2: Reverse second half
+        Node secondHalf = reverse(slow);
+        Node firstHalf = head;
+
+        // Step 3: Compare both halves
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data)
+                return false;
+
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
+        }
+
+        return true;
+    }
+
+    // Method to reverse linked list
+    public static Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
+
+        while (current != null) {
+            Node nextNode = current.next;
+            current.next = prev;
+            prev = current;
+            current = nextNode;
+        }
+
+        return prev;
     }
 }
