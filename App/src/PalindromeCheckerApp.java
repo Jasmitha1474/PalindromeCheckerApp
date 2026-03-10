@@ -1,45 +1,46 @@
-import java.util.Scanner;
-import java.util.Stack;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Scanner;;
+
+//usecase7
 public class PalindromeCheckerApp {
-    /**
-     * Application entry point FOR uc5
-     *
-     *Stack-Based Palindrome Checker.
-     *
-     * @param args Command-line arguements
-     */
-    public static void main(String[] args){
 
-        Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) {
 
-        System.out.print("Enter a string: ");
-        String input = scanner.nextLine();
+        Scanner sc = new Scanner(System.in);
 
-        // Create Stack
-        Stack<Character> stack = new Stack<>();
+        // Read input string
+        System.out.print("Input: ");
+        String input = sc.nextLine();
 
-        // Push characters into stack
-        for (int i = 0; i < input.length(); i++) {
-            stack.push(input.charAt(i));
+        // Convert to lowercase (optional for case-insensitive check)
+        input = input.toLowerCase();
+
+        // Create a Deque
+        Deque<Character> deque = new LinkedList<>();
+
+        // Add each character into deque
+        for (char c : input.toCharArray()) {
+            deque.addLast(c);   // insert at rear
         }
 
         boolean isPalindrome = true;
 
-        // Pop characters and compare
-        for (int i = 0; i < input.length(); i++) {
+        // Compare front and rear elements
+        while (deque.size() > 1) {
 
-            char poppedChar = stack.pop();
+            char front = deque.removeFirst();  // remove from front
+            char rear  = deque.removeLast();   // remove from rear
 
-            if (input.charAt(i) != poppedChar) {
+            if (front != rear) {
                 isPalindrome = false;
                 break;
             }
         }
 
-        // Required output format
-        System.out.println("Is palindrome?: " + isPalindrome);
+        System.out.println("Is Palindrome? : " + isPalindrome);
 
-        scanner.close();
+        sc.close();
     }
 }
